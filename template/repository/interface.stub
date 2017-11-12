@@ -1,0 +1,12 @@
+<?php namespace $REPOSITORY_PACKAGE$;
+
+use Chbakouras\CrudApiGenerator\Repository\EloquentRepository;
+
+/**
+ * Interface $REPOSITORY_NAME$
+ * @package $REPOSITORY_PACKAGE$
+ */
+interface $REPOSITORY_NAME$ extends EloquentRepository
+{
+    //
+}

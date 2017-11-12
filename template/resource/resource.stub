@@ -1,0 +1,17 @@
+<?php namespace $RESOURCE_PACKAGE$;
+
+use Illuminate\Http\Resources\Json\Resource;
+
+/**
+ * Controller $RESOURCE_NAME$
+ * @package $RESOURCE_PACKAGE$
+ */
+class $RESOURCE_NAME$ extends Resource
+{
+    public function toArray($request)
+    {
+        return [
+$RESOURCE_PARAMETERS$
+        ];
+    }
+}

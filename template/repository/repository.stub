@@ -1,0 +1,21 @@
+<?php namespace $REPOSITORY_PACKAGE$;
+
+use Chbakouras\CrudApiGenerator\Repository\BaseEloquentRepository;
+use $MODEL_PACKAGE$;
+
+/**
+ * Class $REPOSITORY_IMPL_NAME$
+ * @package $REPOSITORY_PACKAGE$
+ */
+class $REPOSITORY_IMPL_NAME$ extends BaseEloquentRepository implements $REPOSITORY_NAME$
+{
+    /**
+     * Specify Model class name
+     *
+     * @return string
+     */
+    public function model()
+    {
+        return $MODEL_NAME$::class;
+    }
+}

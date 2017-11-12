@@ -1,0 +1,85 @@
+<?php namespace $CONTROLLER_PACKAGE$;
+
+use Chbakouras\CrudApiGenerator\Controller\ApiController;
+use $SERVICE_CLASS$;
+use $GET_ALL_API_REQUEST_CLASS$;
+use $CREATE_API_REQUEST_CLASS$;
+use $UPDATE_API_REQUEST_CLASS$;
+use Exception;
+
+/**
+ * Controller $CONTROLLER_NAME$
+ * @package $CONTROLLER_PACKAGE$
+ */
+class $CONTROLLER_NAME$ extends ApiController
+{
+    /**
+     * $CONTROLLER_NAME$ constructor.
+     * @param $SERVICE_NAME$ $service
+     */
+    public function __construct($SERVICE_NAME$ $service)
+    {
+        $this->service = $service;
+    }
+
+    function getAll($GET_ALL_API_REQUEST_NAME$ $request)
+    {
+        $models = $this->service
+            ->findAllByPaginatedSorted(
+                $request->getParameters(),
+                $this->size(),
+                $this->sort(),
+                $this->direction()
+            );
+
+        return response()
+            ->json($models);
+    }
+
+    function getOne($id)
+    {
+        $found = $this->service
+            ->findOne($id);
+
+        if ($found == null) abort(404, "Not Found");
+
+        return response()
+            ->json($found);
+    }
+
+    function post($CREATE_API_REQUEST_NAME$ $request)
+    {
+        try {
+            $created = $this->service
+                ->create($request->getParameters());
+
+            if ($created == null) abort(404, "Not Found");
+
+            return response()
+                ->json($created, 201);
+        } catch (Exception $e) {
+            return abort(500, $e->getMessage());
+        }
+    }
+
+    function put($id, $UPDATE_API_REQUEST_NAME$ $request)
+    {
+        try {
+            $updated = $this->service
+                ->update($request->getParameters(), $id);
+
+            if ($updated == null) abort(404, "Not Found");
+
+            return response()
+                ->json($updated, 200);
+        } catch (Exception $e) {
+            return abort(500, $e->getMessage());
+        }
+    }
+
+    function delete($id)
+    {
+        $this->service
+            ->deleteById($id);
+    }
+}

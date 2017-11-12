@@ -1,0 +1,20 @@
+<?php namespace $SERVICE_PACKAGE$;
+
+use Chbakouras\CrudApiGenerator\Service\BaseEloquentCrudService;
+use $REPOSITORY_CLASS$;
+
+/**
+ * Class $SERVICE_IMPL_NAME$
+ * @package $SERVICE_PACKAGE$
+ */
+class $SERVICE_IMPL_NAME$ extends BaseEloquentCrudService implements $SERVICE_NAME$
+{
+    /**
+     * $SERVICE_IMPL_NAME$ constructor.
+     * @param $REPOSITORY_NAME$ $repository
+     */
+    public function __construct($REPOSITORY_NAME$ $repository)
+    {
+        $this->repository = $repository;
+    }
+}

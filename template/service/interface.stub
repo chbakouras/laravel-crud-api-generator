@@ -1,0 +1,12 @@
+<?php namespace $SERVICE_PACKAGE$;
+
+use Chbakouras\CrudApiGenerator\Service\CrudService;
+
+/**
+ * Interface $SERVICE_NAME$
+ * @package $SERVICE_PACKAGE$
+ */
+interface $SERVICE_NAME$ extends CrudService
+{
+    //
+}
