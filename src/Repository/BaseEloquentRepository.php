@@ -52,6 +52,9 @@ abstract class BaseEloquentRepository implements EloquentRepository
     function applyQueryAttributes(array $attributes)
     {
         collect($attributes)
+            ->filter(function ($value) {
+                return $value != null;
+            })
             ->each(function ($value, $field) {
                 $this->where($field, $value);
             });
