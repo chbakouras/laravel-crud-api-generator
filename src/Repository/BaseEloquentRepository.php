@@ -29,7 +29,7 @@ abstract class BaseEloquentRepository implements EloquentRepository
             ->where($attribute, '=', $id)
             ->update($attributes);
 
-        return $this->find($id);
+        return $this->findOne($id);
     }
 
     function findAll()
