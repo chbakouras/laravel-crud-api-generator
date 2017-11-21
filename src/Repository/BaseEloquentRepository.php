@@ -5,77 +5,59 @@
  */
 abstract class BaseEloquentRepository implements EloquentRepository
 {
+    protected $model;
     protected $query;
 
     public function __construct()
     {
-        $this->query = resolve($this->model())
-            ->newQuery();
+        $this->model = resolve($this->model());
     }
 
     abstract function model();
 
     function create(array $attributes)
     {
-        return $this->query
+        return $this->model
+            ->newQuery()
             ->create($attributes);
     }
 
     function update(array $attributes, $id, $attribute = 'id')
     {
-        $this->query
+        $this->model
+            ->newQuery()
             ->where($attribute, '=', $id)
             ->update($attributes);
 
         return $this->find($id);
     }
 
-    function with(array $relations)
-    {
-        return $this->query
-            ->with($relations);
-    }
-
-    function where($field, $value)
-    {
-        return $this->query
-            ->where($field, $value);
-    }
-
-    function applyQueryAttributes(array $attributes)
-    {
-        $query = $this->query;
-        foreach ($attributes as $key => $attribute) {
-            if ($attribute != null) {
-                $query = $query->where($key, $attribute);
-            }
-        }
-
-        return $query;
-    }
-
     function findAll()
     {
-        return $this->query
+        return $this->model
+            ->newQuery()
             ->get();
     }
 
     function findAllSorted($sort = 'id', $dir = 'asc')
     {
-        return $this->query
+        return $this->model
+            ->newQuery()
             ->orderBy($sort, $dir)
             ->get();
     }
 
     function findAllPaginated($perPage = 20)
     {
-        return $this->query
+        return $this->model
+            ->newQuery()
             ->paginate($perPage);
     }
 
     function findAllPaginatedSorted($perPage = 20, $sort = 'id', $dir = 'asc')
     {
-        return $this->query
+        return $this->model
+            ->newQuery()
             ->orderBy($sort, $dir)
             ->paginate($perPage);
     }
@@ -112,33 +94,38 @@ abstract class BaseEloquentRepository implements EloquentRepository
 
     function findAllWithIds(array $ids = [])
     {
-        return $this->query
-            ->whereIn($this->query->getKeyName(), $ids)
+        return $this->model
+            ->newQuery()
+            ->whereIn($this->model->getKeyName(), $ids)
             ->get();
     }
 
     function findOne($id)
     {
-        return $this->query
+        return $this->model
+            ->newQuery()
             ->find($id);
     }
 
     function delete($model)
     {
-        return $this->query
+        return $this->model
+            ->newQuery()
             ->destroy($model->getKey());
     }
 
     function deleteById($id)
     {
-        return $this->query
+        return $this->model
+            ->newQuery()
             ->destroy($id);
     }
 
     function deleteInBatch(array $ids)
     {
-        $this->query
-            ->whereIn($this->query->getKeyName(), $ids)
+        $this->model
+            ->newQuery()
+            ->whereIn($this->model->getKeyName(), $ids)
             ->delete();
     }
 
@@ -157,14 +144,30 @@ abstract class BaseEloquentRepository implements EloquentRepository
 
     function exists($id)
     {
-        return $this->query->find($id)
+        return $this->model
+            ->newQuery()
+            ->find($id)
             ? true
             : false;
     }
 
     function count()
     {
-        return $this->query
+        return $this->model
+            ->newQuery()
             ->count();
+    }
+
+    function applyQueryAttributes(array $attributes)
+    {
+        $query = $this->model->newQuery();
+
+        foreach ($attributes as $key => $attribute) {
+            if ($attribute != null) {
+                $query = $query->where($key, $attribute);
+            }
+        }
+
+        return $query;
     }
 }

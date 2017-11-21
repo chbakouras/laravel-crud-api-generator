@@ -34,23 +34,6 @@ interface EloquentRepository extends GenericRepository
     function update(array $attributes, $id, $attribute = 'id');
 
     /**
-     * Eager load magic relations
-     *
-     * @param array $relations
-     * @return $this
-     */
-    function with(array $relations);
-
-    /**
-     * Apply where to QueryBuilder
-     *
-     * @param $attribute
-     * @param $key
-     * @return $this
-     */
-    function where($attribute, $key);
-
-    /**
      * Apply where to QueryBuilder for all attributes
      *
      * @param array $attributes
