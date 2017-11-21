@@ -65,14 +65,14 @@ abstract class BaseEloquentRepository implements EloquentRepository
     function findAll()
     {
         return $this->model
-            ->get('*');
+            ->get();
     }
 
     function findAllSorted($sort = 'id', $dir = 'asc')
     {
         return $this->model
             ->orderBy($sort, $dir)
-            ->get('*');
+            ->get();
     }
 
     function findAllPaginated($perPage = 20)
@@ -92,7 +92,7 @@ abstract class BaseEloquentRepository implements EloquentRepository
     {
         return $this
             ->applyQueryAttributes($attributes)
-            ->get('*');
+            ->get();
     }
 
     function findAllBySorted(array $attributes, $sort = 'id', $dir = 'asc')
@@ -100,7 +100,7 @@ abstract class BaseEloquentRepository implements EloquentRepository
         return $this
             ->applyQueryAttributes($attributes)
             ->orderBy($sort, $dir)
-            ->get('*');
+            ->get();
     }
 
     function findAllByPaginated(array $attributes, $perPage = 20)
@@ -122,7 +122,7 @@ abstract class BaseEloquentRepository implements EloquentRepository
     {
         return $this->model
             ->whereIn($this->model->getKeyName(), $ids)
-            ->get('*');
+            ->get();
     }
 
     function findOne($id)
