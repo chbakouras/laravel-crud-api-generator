@@ -111,7 +111,7 @@ abstract class BaseEloquentRepository implements EloquentRepository
     {
         return $this->model
             ->newQuery()
-            ->where($model->getKeyName(), $model->getKey())
+            ->where($this->model->getKeyName(), $this->model->getKey())
             ->delete();
     }
 
@@ -119,7 +119,7 @@ abstract class BaseEloquentRepository implements EloquentRepository
     {
         return $this->model
             ->newQuery()
-            ->where($model->getKeyName(), $model->getKey())
+            ->where($this->model->getKeyName(), $this->model->getKey())
             ->delete();
     }
 
