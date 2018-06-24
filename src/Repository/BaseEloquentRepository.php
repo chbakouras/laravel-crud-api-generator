@@ -111,14 +111,16 @@ abstract class BaseEloquentRepository implements EloquentRepository
     {
         return $this->model
             ->newQuery()
-            ->destroy($model->getKey());
+            ->where($model->getKeyName(), $model->getKey())
+            ->delete();
     }
 
     function deleteById($id)
     {
         return $this->model
             ->newQuery()
-            ->destroy($id);
+            ->where($model->getKeyName(), $model->getKey())
+            ->delete();
     }
 
     function deleteInBatch(array $ids)
