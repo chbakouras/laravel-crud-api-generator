@@ -132,7 +132,7 @@ abstract class BaseEloquentCrudService implements CrudService
      * Find model with $id
      *
      * @param $id
-     * @return $model
+     * @return Model $model
      */
     function findOne($id)
     {

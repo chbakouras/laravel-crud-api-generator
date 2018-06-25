@@ -1,5 +1,6 @@
 <?php namespace Chbakouras\CrudApiGenerator\Service;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 /**

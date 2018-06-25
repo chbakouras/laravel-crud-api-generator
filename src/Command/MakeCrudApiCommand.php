@@ -1,11 +1,11 @@
 <?php namespace Chbakouras\CrudApiGenerator\Command;
 
 use Chbakouras\CrudApiGenerator\Generator\ApiControllerGenerator;
+use Chbakouras\CrudApiGenerator\Generator\BaseGenerator;
 use Chbakouras\CrudApiGenerator\Generator\CreateRequestGenerator;
 use Chbakouras\CrudApiGenerator\Generator\GetAllRequestGenerator;
 use Chbakouras\CrudApiGenerator\Generator\RepositoryGenerator;
 use Chbakouras\CrudApiGenerator\Generator\RepositoryImplGenerator;
-use Chbakouras\CrudApiGenerator\Generator\ResourceGenerator;
 use Chbakouras\CrudApiGenerator\Generator\ServiceGenerator;
 use Chbakouras\CrudApiGenerator\Generator\ServiceImplGenerator;
 use Chbakouras\CrudApiGenerator\Generator\UpdateRequestGenerator;
@@ -29,10 +29,21 @@ class MakeCrudApiCommand extends Command
     {
         $name = $input->getArgument('name');
 
+        $this->generateModel($name);
         $this->generateRepository($name);
         $this->generateService($name);
         $this->generateRequests($name);
         $this->generateController($name);
+    }
+
+    private function generateModel($name)
+    {
+        $modelClass = BaseGenerator::getModelClass($name);
+        if (!class_exists($modelClass)) {
+            $this->callSilent('make:model', [
+                'name' => $name,
+            ]);
+        }
     }
 
     private function generateRepository($name)

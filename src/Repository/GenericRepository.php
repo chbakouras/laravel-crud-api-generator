@@ -1,5 +1,6 @@
 <?php namespace Chbakouras\CrudApiGenerator\Repository;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 /**
@@ -91,7 +92,7 @@ interface GenericRepository
      * Find model with $id
      *
      * @param $id
-     * @return $model
+     * @return Model $model
      */
     function findOne($id);
 
@@ -123,7 +124,7 @@ interface GenericRepository
      * Persists the $model
      *
      * @param $model
-     * @return $model
+     * @return Model $model
      */
     function save($model);
 

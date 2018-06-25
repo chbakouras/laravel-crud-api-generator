@@ -25,9 +25,11 @@ abstract class BaseGenerator
 
     public function __construct($modelName)
     {
+        $modelClass = BaseGenerator::getModelClass($modelName);
+
         $this->variables = [
             '$MODEL_NAME$' => $modelName,
-            '$MODEL_PACKAGE$' => crud_api_config('laravel_crud_api_generator.models.package', 'App\Models') . '\\' . $modelName,
+            '$MODEL_PACKAGE$' => $modelClass,
             '$REPOSITORY_NAME$' => $modelName . crud_api_config('laravel_crud_api_generator.repositories.interface-name', 'Repository'),
             '$REPOSITORY_IMPL_NAME$' => $modelName . crud_api_config('laravel_crud_api_generator.repositories.implementation-name', 'RepositoryImpl'),
             '$REPOSITORY_CLASS$' => crud_api_config('laravel_crud_api_generator.repositories.package', 'App\Repositories\System') . '\\' . $modelName . crud_api_config('laravel_crud_api_generator.repositories.interface-name', 'Repository'),
@@ -47,13 +49,18 @@ abstract class BaseGenerator
             '$UPDATE_API_REQUEST_NAME$' => 'Update' . $modelName . crud_api_config('laravel_crud_api_generator.requests.name', 'ApiRequest'),
             '$UPDATE_API_REQUEST_CLASS$' => crud_api_config('laravel_crud_api_generator.requests.package', 'App\Http\Requests') . '\\' . $modelName . '\\' . 'Update' . $modelName . crud_api_config('laravel_crud_api_generator.requests.name', 'ApiRequest'),
             '$GET_ALL_API_REQUEST_NAME$' => 'GetAll' . $modelName . crud_api_config('laravel_crud_api_generator.requests.name', 'ApiRequest'),
-            '$GET_ALL_API_REQUEST_CLASS$' => crud_api_config('laravel_crud_api_generator.requests.package', 'App\Http\Requests') . '\\' . $modelName . '\\' . 'GetAll' . $modelName . crud_api_config('laravel_crud_api_generator.requests.name'),
-            '$REQUEST_PARAMETERS$' => $this->createRequestParameters(crud_api_config('laravel_crud_api_generator.models.package', 'App\Models') . '\\' . $modelName),
+            '$GET_ALL_API_REQUEST_CLASS$' => crud_api_config('laravel_crud_api_generator.requests.package', 'App\Http\Requests') . '\\' . $modelName . '\\' . 'GetAll' . $modelName . crud_api_config('laravel_crud_api_generator.requests.name', 'ApiRequest'),
+            '$REQUEST_PARAMETERS$' => $this->createRequestParameters($modelClass),
             '$RESOURCE_NAME$' => $modelName . crud_api_config('laravel_crud_api_generator.resource.name', 'Resource'),
             '$RESOURCE_CLASS$' => crud_api_config('laravel_crud_api_generator.resource.package', 'App\Http\Resources') . '\\' . $modelName . crud_api_config('laravel_crud_api_generator.resource.name', 'Resource'),
             '$RESOURCE_PACKAGE$' => crud_api_config('laravel_crud_api_generator.resource.package', 'App\Http\Resources'),
-            '$RESOURCE_PARAMETERS$' => $this->createResourceParameters(crud_api_config('laravel_crud_api_generator.models.package', 'App\Models') . '\\' . $modelName),
+            '$RESOURCE_PARAMETERS$' => $this->createResourceParameters($modelClass),
         ];
+    }
+
+    public static function getModelClass($modelName)
+    {
+        return crud_api_config('laravel_crud_api_generator.models.package', 'App\Models') . '\\' . $modelName;
     }
 
     public function generate()
@@ -120,7 +127,7 @@ abstract class BaseGenerator
 
         $lines = [];
         foreach ($columns as $column) {
-            array_push($lines, "\t\t\t" . '"' . camel_case($column) . '" => ' . '$this->' . $column .',' . PHP_EOL);
+            array_push($lines, "\t\t\t" . '"' . camel_case($column) . '" => ' . '$this->' . $column . ',' . PHP_EOL);
         }
 
         return implode("", $lines);
