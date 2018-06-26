@@ -1,5 +1,8 @@
 <?php namespace Chbakouras\CrudApiGenerator\Repository;
 
+use Chbakouras\CrudApiGenerator\Repository\Query\Where;
+use Chbakouras\CrudApiGenerator\Repository\Query\With;
+
 /**
  * @author Chrisostomos Bakouras
  */
@@ -164,9 +167,20 @@ abstract class BaseEloquentRepository implements EloquentRepository
     {
         $query = $this->model->newQuery();
 
-        foreach ($attributes as $key => $attribute) {
-            if ($attribute != null) {
-                $query = $query->where($key, $attribute);
+        foreach ($attributes as $key => $value) {
+            if ($value != null) {
+
+                if ($value instanceof With) {
+                    $query->with($value->getWiths());
+                } else if ($value instanceof Where) {
+                    $query = $query->where(
+                        $value->getColumn(),
+                        $value->getOperation(),
+                        $value->getValue()
+                    );
+                } else {
+                    $query = $query->where($key, $value);
+                }
             }
         }
 
