@@ -1,6 +1,7 @@
 <?php namespace Chbakouras\CrudApiGenerator\Repository;
 
 use Chbakouras\CrudApiGenerator\Repository\Query\Where;
+use Chbakouras\CrudApiGenerator\Repository\Query\WhereGroup;
 use Chbakouras\CrudApiGenerator\Repository\Query\With;
 
 /**
@@ -173,11 +174,25 @@ abstract class BaseEloquentRepository implements EloquentRepository
                 if ($value instanceof With) {
                     $query->with($value->getWiths());
                 } else if ($value instanceof Where) {
-                    $query = $query->where(
-                        $value->getColumn(),
-                        $value->getOperation(),
-                        $value->getValue()
-                    );
+                    $query = $this->applyWhere($query, $value);
+                } else if ($value instanceof WhereGroup) {
+                    $wheres = $value->getWheres();
+
+                    if ($wheres && sizeof($wheres) > 0) {
+                        $query = $query->where(function ($innerQuery) use (&$wheres, &$value) {
+                            $firstWhere = array_shift($wheres);
+
+                            $query = $this->applyWhere($innerQuery, $firstWhere);
+
+                            foreach ($wheres as $where) {
+                                if ($value->getOperator() === WhereGroup::AND) {
+                                    $query = $this->applyWhere($query, $where);
+                                } else if ($value->getOperator() === WhereGroup::OR) {
+                                    $query = $this->applyOrWhere($query, $where);
+                                }
+                            }
+                        });
+                    }
                 } else {
                     $query = $query->where($key, $value);
                 }
@@ -185,5 +200,21 @@ abstract class BaseEloquentRepository implements EloquentRepository
         }
 
         return $query;
+    }
+
+    private function applyWhere($query, Where $where) {
+        return $query->where(
+            $where->getColumn(),
+            $where->getOperation(),
+            $where->getValue()
+        );
+    }
+
+    private function applyOrWhere($query, Where $where) {
+        return $query->orWhere(
+            $where->getColumn(),
+            $where->getOperation(),
+            $where->getValue()
+        );
     }
 }
